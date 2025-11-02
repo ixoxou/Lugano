@@ -1,0 +1,89 @@
+---
+import Dialog from "./Dialog.astro";
+const { trend } = Astro.props;
+---
+<div class=`entry ${trend}`>
+    <h1>{trend}</h1>
+</div>
+<Dialog trend={trend} />
+<style>
+    .entry {
+        background-color: #000;
+        height: 30vw;
+        width: 40vw;
+        color: #fff;
+        flex: 0 0 auto;
+    }
+
+    h1 {
+        position: relative;
+        left: 0.5vw;
+        line-height: 1;
+        width: fit-content;
+        height: fit-content;
+        text-transform: uppercase;
+        font-size: 5vw;
+    }
+    
+    @media (max-width: 800px) {
+        h1 {
+            font-size: 7.5vw;
+            left: 1.2vw;
+        }
+
+        .entry {
+            width: 85vw;
+            height: 70vw;
+        }
+    }
+</style>
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const entries = document.querySelectorAll('.entry');
+
+        entries.forEach(entry => {
+            entry.addEventListener('mouseover', () => {
+                const dialog = document.querySelector(`dialog#${entry.classList.item(1)}`)
+                const clone = showDialog(entry, dialog);
+
+                clone.addEventListener('mouseleave', () => {
+                    closeDialog(dialog);
+                })
+            })
+
+            entry.addEventListener('moouseleave', () => {
+                const dialog = document.querySelector(`dialog#${entry.classList.item(1)}`)
+                closeDialog(dialog);
+            })
+
+        })
+    })
+
+    function showDialog(entry, dialog) {
+        const clone = entry.cloneNode(true);
+        const rect = entry.getBoundingClientRect();
+
+        Object.assign(clone.style, {
+            position: 'sticky',
+            top: rect.top + 'px',
+            left: rect.left + 'px',
+            width: rect.width + 'px',
+            height: rect.height + 'px',
+        });
+        clone.style.filter = 'invert(1)';
+
+        dialog.innerHTML = '';
+        dialog.appendChild(clone);
+        // populateDialog(dialog);
+
+        dialog.show();
+        document.body.style.overflow = 'hidden';
+
+        return clone;
+    }
+
+    function closeDialog(dialog) {
+        dialog.close();
+        document.body.style.overflow = '';
+    }
+</script>

@@ -1,0 +1,19 @@
+---
+const { trend } = Astro.props;
+---
+<dialog id=`${trend}`>
+</dialog>
+<style>
+    dialog {
+        width: 200vw;
+        height: 200dvh;
+        background-color: #000;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        max-width: 200vw;
+        max-height: 200dvh;
+        position: fixed;
+        inset: 0 -50vw;
+    }
+</style>
